@@ -1,0 +1,9 @@
+{
+	"name": "PracticeForIntView",
+	"location": "eastus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "6aecb945-afa7-4dca-9c37-d08fcbaeb734",
+		"tenantId": "6711039e-c265-432c-b680-a3af66790e06"
+	}
+}
