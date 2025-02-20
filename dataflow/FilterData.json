@@ -12,7 +12,15 @@
 					"name": "EmpsDept"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText7",
+						"type": "DatasetReference"
+					},
+					"name": "SinkedOutput"
+				}
+			],
 			"transformations": [
 				{
 					"name": "FilterEmpDept"
@@ -27,7 +35,17 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> EmpsDept",
-				"EmpsDept filter(Dept=='sales') ~> FilterEmpDept"
+				"EmpsDept filter(Dept=='sales') ~> FilterEmpDept",
+				"FilterEmpDept sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ID as string,",
+				"          Name as string,",
+				"          Dept as string,",
+				"          Address as string",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SinkedOutput"
 			]
 		}
 	}
