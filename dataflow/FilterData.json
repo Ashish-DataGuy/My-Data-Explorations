@@ -1,0 +1,34 @@
+{
+	"name": "FilterData",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText6",
+						"type": "DatasetReference"
+					},
+					"name": "EmpsDept"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "FilterEmpDept"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as string,",
+				"          Name as string,",
+				"          Dept as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> EmpsDept",
+				"EmpsDept filter(Dept=='sales') ~> FilterEmpDept"
+			]
+		}
+	}
+}
