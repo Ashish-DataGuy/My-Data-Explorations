@@ -13,6 +13,201 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/EmpAddJoinTable')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DelimitedText4",
+								"type": "DatasetReference"
+							},
+							"name": "Employees"
+						},
+						{
+							"dataset": {
+								"referenceName": "DelimitedText5",
+								"type": "DatasetReference"
+							},
+							"name": "Addresses"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "OutputTable",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "join1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as string,",
+						"          Name as string,",
+						"          Dept as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> Employees",
+						"source(output(",
+						"          ID as string,",
+						"          Address as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> Addresses",
+						"Employees, Addresses join(Employees@ID == Addresses@ID,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"join1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ID as string,",
+						"          Name as string,",
+						"          Dept as string,",
+						"          Address as string",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FilterData')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DelimitedText6",
+								"type": "DatasetReference"
+							},
+							"name": "EmpsDept"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DelimitedText7",
+								"type": "DatasetReference"
+							},
+							"name": "SinkedOutput"
+						}
+					],
+					"transformations": [
+						{
+							"name": "FilterEmpDept"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as string,",
+						"          Name as string,",
+						"          Dept as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> EmpsDept",
+						"EmpsDept filter(Dept=='sales') ~> FilterEmpDept",
+						"FilterEmpDept sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ID as string,",
+						"          Name as string,",
+						"          Dept as string,",
+						"          Address as string",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SinkedOutput"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Join tables')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DelimitedText1",
+								"type": "DatasetReference"
+							},
+							"name": "Employees"
+						},
+						{
+							"dataset": {
+								"referenceName": "DelimitedText2",
+								"type": "DatasetReference"
+							},
+							"name": "Addresses"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DelimitedText3",
+								"type": "DatasetReference"
+							},
+							"name": "JoinedTableOutPut"
+						}
+					],
+					"transformations": [
+						{
+							"name": "InnerJoin"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as string,",
+						"          Name as string,",
+						"          Dept as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> Employees",
+						"source(output(",
+						"          ID as string,",
+						"          Address as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> Addresses",
+						"Employees, Addresses join(Employees@ID == Addresses@ID,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> InnerJoin",
+						"InnerJoin sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> JoinedTableOutPut"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DataFlow_JoinTable')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -56,7 +251,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/EmpAddJoinTable')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/JoinTables')]",
@@ -102,7 +299,9 @@
 				"annotations": [],
 				"lastPublishTime": "2025-02-19T21:17:02Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Join tables')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Schedule a Trigger')]",
