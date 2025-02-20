@@ -1,0 +1,26 @@
+{
+	"name": "Schedule a Trigger",
+	"properties": {
+		"description": "Schedule a Trigger",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "DataFlow_JoinTable",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 15,
+				"startTime": "2025-02-20T23:10:00",
+				"endTime": "2025-02-20T12:10:00",
+				"timeZone": "Central Standard Time"
+			}
+		}
+	}
+}
