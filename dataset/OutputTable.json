@@ -1,0 +1,40 @@
+{
+	"name": "OutputTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage9",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "part-00000-7d644aa9-03b6-4e65-be8b-eacd7d22180e-c000.csv",
+				"container": "sink"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ID",
+				"type": "String"
+			},
+			{
+				"name": "Name",
+				"type": "String"
+			},
+			{
+				"name": "Dept",
+				"type": "String"
+			},
+			{
+				"name": "Address",
+				"type": "String"
+			}
+		]
+	}
+}
