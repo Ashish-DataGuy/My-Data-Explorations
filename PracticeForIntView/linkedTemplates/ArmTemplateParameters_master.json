@@ -32,6 +32,9 @@
 		"AzureBlobStorage9_connectionString": {
 			"value": ""
 		},
+		"AzureBlobStorage10_connectionString": {
+			"value": ""
+		},
 		"containerUri": {
 			"value": ""
 		},
